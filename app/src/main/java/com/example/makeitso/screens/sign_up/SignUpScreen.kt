@@ -27,30 +27,23 @@ import com.example.makeitso.R.string as AppText
 import com.example.makeitso.common.composable.*
 import com.example.makeitso.common.ext.basicButton
 import com.example.makeitso.common.ext.fieldModifier
-import com.example.makeitso.screens.profile.ProfileViewModel
 
 @Composable
 fun SignUpScreen(
   openAndPopUp: (String, String) -> Unit,
   modifier: Modifier = Modifier,
-  viewModel: SignUpViewModel = hiltViewModel(),
-  viewModelProfile: ProfileViewModel = hiltViewModel()
+  viewModel: SignUpViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState
-  val uiStateProfile by viewModelProfile.uiState
   val fieldModifier = Modifier.fieldModifier()
 
   BasicToolbar(AppText.create_account)
 
   Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .fillMaxHeight()
-      .verticalScroll(rememberScrollState()),
+    modifier = modifier.fillMaxWidth().fillMaxHeight().verticalScroll(rememberScrollState()),
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    NameField(uiStateProfile.displayName, viewModelProfile::onDisplayNameChange, fieldModifier )
     EmailField(uiState.email, viewModel::onEmailChange, fieldModifier)
     PasswordField(uiState.password, viewModel::onPasswordChange, fieldModifier)
     RepeatPasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, fieldModifier)
@@ -59,4 +52,6 @@ fun SignUpScreen(
       viewModel.onSignUpClick(openAndPopUp)
     }
   }
+
+
 }

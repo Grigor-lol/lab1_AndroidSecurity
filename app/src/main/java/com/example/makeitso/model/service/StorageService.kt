@@ -16,17 +16,13 @@ limitations under the License.
 
 package com.example.makeitso.model.service
 
-import com.example.makeitso.model.Profile
 import com.example.makeitso.model.Task
 import kotlinx.coroutines.flow.Flow
 
 interface StorageService {
   val tasks: Flow<List<Task>>
-  val profile: Flow<List<Profile>>
   suspend fun getTask(taskId: String): Task?
   suspend fun save(task: Task): String
   suspend fun update(task: Task)
   suspend fun delete(taskId: String)
-  suspend fun addProfile(profile: Profile)
-  //suspend fun getProfile(profileId: String): Profile?
 }

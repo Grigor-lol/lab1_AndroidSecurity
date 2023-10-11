@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.example.makeitso.model.service.impl
 
-import com.example.makeitso.model.Profile
 import com.example.makeitso.model.Task
 import com.example.makeitso.model.service.AccountService
 import com.example.makeitso.model.service.StorageService
@@ -38,15 +37,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
 
   @OptIn(ExperimentalCoroutinesApi::class)
   override val tasks: Flow<List<Task>>
-    get() =
-      auth.currentUser.flatMapLatest { user ->
-        firestore.collection(TASK_COLLECTION).whereEqualTo(USER_ID_FIELD, user.id).dataObjects()
-      }
-  override val  profile: Flow<List<Profile>>
-    get() =
-      auth.currentUser.flatMapLatest { user ->
-        firestore.collection(PROFILE_COLLECTION).whereEqualTo(USER_ID_FIELD, user.id).dataObjects()
-      }
+    get() = auth.currentUser.flatMapLatest { user ->
+      firestore.collection(TASK_COLLECTION).whereEqualTo(USER_ID_FIELD, user.id).dataObjects()
+    }
 
   override suspend fun getTask(taskId: String): Task? =
     firestore.collection(TASK_COLLECTION).document(taskId).get().await().toObject()
@@ -66,18 +59,9 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     firestore.collection(TASK_COLLECTION).document(taskId).delete().await()
   }
 
-  override suspend fun addProfile(profile: Profile) {
-    val profileWithUserId = profile.copy(userId = auth.currentUserId)
-    firestore.collection(PROFILE_COLLECTION).add(profileWithUserId).await().id
-  }
-
-
-
-
   companion object {
     private const val USER_ID_FIELD = "userId"
     private const val TASK_COLLECTION = "tasks"
-    private const val PROFILE_COLLECTION = "profiles"
     private const val SAVE_TASK_TRACE = "saveTask"
     private const val UPDATE_TASK_TRACE = "updateTask"
   }

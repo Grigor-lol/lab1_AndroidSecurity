@@ -17,19 +17,24 @@ limitations under the License.
 package com.example.makeitso.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.TextFields
+import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material.icons.filled.PictureInPicture
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import com.example.makeitso.R.drawable as AppIcon
 import com.example.makeitso.R.string as AppText
 
@@ -65,11 +70,32 @@ fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier =
 fun NameField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
   OutlinedTextField(
     singleLine = true,
-    modifier = modifier,
+    modifier = modifier.padding(bottom = 20.dp),
     value = value,
     onValueChange = { onNewValue(it) },
-    placeholder = { Text(stringResource(AppText.email)) },
-    leadingIcon = { Icon(imageVector = Icons.Default.TextFields, contentDescription = "Name") }
+    placeholder = { Text(stringResource(AppText.name)) },
+    leadingIcon = { Icon(imageVector = Icons.Default.Edit, contentDescription = "Name") },
+    colors = TextFieldDefaults.textFieldColors(
+      backgroundColor = Color.LightGray,
+      unfocusedIndicatorColor = Color.LightGray,
+      focusedIndicatorColor = Color.LightGray
+  ))
+}
+
+@Composable
+fun AvatarField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
+  OutlinedTextField(
+    singleLine = true,
+    modifier = modifier.padding(bottom = 20.dp),
+    value = value,
+    onValueChange = { onNewValue(it) },
+    placeholder = { Text(stringResource(AppText.ava)) },
+    leadingIcon = { Icon(imageVector = Icons.Default.PictureInPicture, contentDescription = "Avatar") },
+    colors = TextFieldDefaults.textFieldColors(
+      backgroundColor = Color.LightGray,
+      unfocusedIndicatorColor = Color.LightGray,
+      focusedIndicatorColor = Color.LightGray
+    )
   )
 }
 

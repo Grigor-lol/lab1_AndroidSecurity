@@ -31,12 +31,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.makeitso.R.drawable as AppIcon
 import com.example.makeitso.R.string as AppText
 import com.example.makeitso.common.composable.ActionToolbar
-import com.example.makeitso.common.composable.BasicButton
-import com.example.makeitso.common.ext.basicButton
 import com.example.makeitso.common.ext.smallSpacer
 import com.example.makeitso.common.ext.toolbarActions
 import com.example.makeitso.model.Task
-import com.example.makeitso.screens.profile.ProfileViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -44,14 +41,9 @@ import com.example.makeitso.screens.profile.ProfileViewModel
 @ExperimentalMaterialApi
 fun TasksScreen(
   openScreen: (String) -> Unit,
-  openAndPopUp: (String, String) -> Unit,
   modifier: Modifier = Modifier,
-  viewModel: TasksViewModel = hiltViewModel(),
-  viewModelProfile: ProfileViewModel = hiltViewModel()
+  viewModel: TasksViewModel = hiltViewModel()
 ) {
-  val tasks = viewModel
-    .tasks
-    .collectAsStateWithLifecycle(emptyList())
   Scaffold(
     floatingActionButton = {
       FloatingActionButton(
@@ -64,6 +56,11 @@ fun TasksScreen(
       }
     }
   ) {
+    val tasks = viewModel
+      .tasks
+      .collectAsStateWithLifecycle(emptyList())
+    val options by viewModel.options
+
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
       ActionToolbar(
         title = AppText.tasks,
@@ -74,7 +71,6 @@ fun TasksScreen(
 
       Spacer(modifier = Modifier.smallSpacer())
 
-      val options by viewModel.options
       LazyColumn {
         items(tasks.value, key = { it.id }) { taskItem ->
           TaskItem(
@@ -84,9 +80,6 @@ fun TasksScreen(
             onActionClick = { action -> viewModel.onTaskActionClick(openScreen, taskItem, action) }
           )
         }
-      }
-      BasicButton(AppText.create_account, Modifier.basicButton()) {
-        viewModelProfile.onProfileClick(openAndPopUp)
       }
     }
   }

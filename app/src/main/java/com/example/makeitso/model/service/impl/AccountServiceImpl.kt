@@ -16,12 +16,13 @@ limitations under the License.
 
 package com.example.makeitso.model.service.impl
 
+import androidx.core.net.toUri
 import com.example.makeitso.model.User
 import com.example.makeitso.model.service.AccountService
 import com.example.makeitso.model.service.trace
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import javax.inject.Inject
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -58,27 +59,42 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
     auth.signInAnonymously().await()
   }
 
-  override suspend fun linkAccount(email: String, password: String): Unit {
-    trace(LINK_ACCOUNT_TRACE){
+  override suspend fun linkAccount(email: String, password: String): Unit =
+    trace(LINK_ACCOUNT_TRACE) {
       val credential = EmailAuthProvider.getCredential(email, password)
       auth.currentUser!!.linkWithCredential(credential).await()
     }
-  }
 
   override suspend fun deleteAccount() {
     auth.currentUser!!.delete().await()
   }
 
-  override suspend fun signOut(): Unit {
-    trace(LINK_ACCOUNT_TRACE) {
-      if (auth.currentUser!!.isAnonymous) {
-        auth.currentUser!!.delete()
-      }
-      auth.signOut()
-
-      // Sign the user back in anonymously.
-      createAnonymousAccount()
+  override fun getProfilePicture(): String {
+    return auth.currentUser!!.photoUrl.toString()
+  }
+  override fun getProfileDisplayName(): String {
+    return auth.currentUser!!.displayName.toString()
+  }
+  override fun setProfileDisplayName(dispName: String) {
+    val profileUpdates = userProfileChangeRequest {
+      displayName = dispName
     }
+    auth.currentUser!!.updateProfile(profileUpdates)
+  }
+  override fun setProfilePicture(picURL: String) {
+    val profileUpdates = userProfileChangeRequest {
+      photoUri  = picURL.toUri()
+    }
+    auth.currentUser!!.updateProfile(profileUpdates)
+  }
+  override suspend fun signOut() {
+    if (auth.currentUser!!.isAnonymous) {
+      auth.currentUser!!.delete()
+    }
+    auth.signOut()
+
+    // Sign the user back in anonymously.
+    createAnonymousAccount()
   }
 
   companion object {

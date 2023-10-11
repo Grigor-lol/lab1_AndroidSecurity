@@ -43,6 +43,7 @@ class TasksViewModel @Inject constructor(
     val hasEditOption = configurationService.isShowTaskEditButtonConfig
     options.value = TaskActionOption.getOptions(hasEditOption)
   }
+
   fun onTaskCheckChange(task: Task) {
     launchCatching { storageService.update(task.copy(completed = !task.completed)) }
   }

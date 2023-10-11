@@ -78,7 +78,7 @@ private fun CardEditor(
         Text(text = content, modifier = Modifier.padding(16.dp, 0.dp))
       }
 
-      Icon(painter = painterResource(icon), contentDescription = "Icon", tint = highlightColor)
+      Icon(painter = painterResource(icon), contentDescription = "Icon", tint = highlightColor,  modifier = Modifier.size(24.dp))
     }
   }
 }

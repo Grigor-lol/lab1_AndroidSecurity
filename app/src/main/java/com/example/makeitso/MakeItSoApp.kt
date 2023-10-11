@@ -39,9 +39,9 @@ import androidx.navigation.navArgument
 import com.example.makeitso.common.composable.PermissionDialog
 import com.example.makeitso.common.composable.RationaleDialog
 import com.example.makeitso.common.snackbar.SnackbarManager
+import com.example.makeitso.screens.change_info.ChangeInfo
 import com.example.makeitso.screens.edit_task.EditTaskScreen
 import com.example.makeitso.screens.login.LoginScreen
-import com.example.makeitso.screens.profile.ProfileUserScreen
 import com.example.makeitso.screens.settings.SettingsScreen
 import com.example.makeitso.screens.sign_up.SignUpScreen
 import com.example.makeitso.screens.splash.SplashScreen
@@ -140,13 +140,12 @@ fun NavGraphBuilder.makeItSoGraph(appState: MakeItSoAppState) {
     SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
   }
 
-  composable(TASKS_SCREEN) { TasksScreen(openScreen = { route -> appState.navigate(route) },
-    openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
+
+  composable(CHANGE_INFO_SCREEN) {
+    ChangeInfo(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
   }
 
-  composable(PROFILE_USER_SCREEN) {
-    ProfileUserScreen()
-  }
+  composable(TASKS_SCREEN) { TasksScreen(openScreen = { route -> appState.navigate(route) }) }
 
   composable(
     route = "$EDIT_TASK_SCREEN$TASK_ID_ARG",
